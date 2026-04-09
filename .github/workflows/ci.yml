@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/**"
+      - "docs/**"
+      - "examples/**"
+      - "scripts/**"
+      - "sql/**"
+      - "tests/**"
+      - "README.md"
+      - "SECURITY.md"
+      - "CONTRIBUTING.md"
+      - "Makefile"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".github/**"
+      - "docs/**"
+      - "examples/**"
+      - "scripts/**"
+      - "sql/**"
+      - "tests/**"
+      - "README.md"
+      - "SECURITY.md"
+      - "CONTRIBUTING.md"
+      - "Makefile"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install test dependency
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pytest
+
+      - name: Compile Python sources
+        run: |
+          python -m py_compile scripts/firewalla_csv_to_sqlite.py
+          if [ -f scripts/export_top_blocked_sources.py ]; then
+            python -m py_compile scripts/export_top_blocked_sources.py
+          fi
+
+      - name: Run tests
+        run: |
+          pytest
+
+      - name: Build empty SQLite database from repo SQL
+        run: |
+          sqlite3 "$RUNNER_TEMP/firewalla_empty.sqlite3" < sql/schema.sql
+          sqlite3 "$RUNNER_TEMP/firewalla_empty.sqlite3" < sql/indexes.sql
+          sqlite3 "$RUNNER_TEMP/firewalla_empty.sqlite3" < sql/views.sql
+
+      - name: Run SQL query files against empty database
+        run: |
+          for file in \
+            sql/inbound-analysis.sql \
+            sql/rule-analysis.sql \
+            sql/country-and-list-filters.sql \
+            sql/anomaly-hunting.sql
+          do
+            sqlite3 "$RUNNER_TEMP/firewalla_empty.sqlite3" < "$file" > /dev/null
+          done
+
+      - name: Smoke test example import
+        run: |
+          if [ -f examples/sample-firewalla-export.csv ]; then
+            python scripts/firewalla_csv_to_sqlite.py \
+              --csv examples/sample-firewalla-export.csv \
+              --db "$RUNNER_TEMP/firewalla_example.sqlite3" \
+              --source-tz UTC \
+              --local-cidr 192.168.1.0/24 \
+              --local-cidr 10.0.0.0/8 \
+              --summary-csv "$RUNNER_TEMP/blocked_inbound_ranked.csv"
+
+            test -f "$RUNNER_TEMP/blocked_inbound_ranked.csv"
+          else
+            echo "No example CSV present. Skipping example import."
+          fi

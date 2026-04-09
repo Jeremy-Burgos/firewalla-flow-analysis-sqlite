@@ -1,0 +1,129 @@
+name: Bug report
+description: Report a reproducible problem in the parser, SQL workflow, or repository examples.
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for a real bug in the repository workflow, parser, SQL, documentation, or examples.
+
+        Keep reports specific. Sanitized samples only.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-flight check
+      options:
+        - label: I reviewed the README and relevant docs before opening this report.
+          required: true
+        - label: I am not posting private exports, secrets, or unsanitized screenshots.
+          required: true
+        - label: I can describe the problem in a reproducible way.
+          required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - CSV parser
+        - SQLite schema
+        - SQL query set
+        - DB Browser workflow
+        - Documentation
+        - CI workflow
+        - Example data
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Problem summary
+      description: State the bug plainly.
+      placeholder: The parser imports the CSV, but inbound rows are being classified as unknown even when local CIDRs are provided.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: The source IP should be treated as remote and the destination IP should be treated as local.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      placeholder: The row is imported, but direction_inferred is set to unknown.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Keep this precise and ordered.
+      placeholder: |
+        1. Run the script with these arguments
+        2. Open the SQLite database
+        3. Run this query
+        4. Observe the result
+    validations:
+      required: true
+
+  - type: textarea
+    id: command
+    attributes:
+      label: Command used
+      render: bash
+      placeholder: |
+        python scripts/firewalla_csv_to_sqlite.py \
+          --csv ./sample.csv \
+          --db ./firewalla_flows.sqlite3 \
+          --source-tz UTC \
+          --local-cidr 192.168.1.0/24
+
+  - type: textarea
+    id: sql
+    attributes:
+      label: SQL query involved
+      render: sql
+      placeholder: |
+        SELECT *
+        FROM imported_flows
+        WHERE direction_inferred = 'unknown'
+        LIMIT 50;
+
+  - type: textarea
+    id: sample
+    attributes:
+      label: Sanitized sample data
+      description: Paste only redacted rows or synthetic samples.
+      render: csv
+      placeholder: |
+        Timestamp,Status,Source,Source IP,Destination,Destination IP,Matched By,Upload,Download,Flow Count
+        April 7, 2026 5:06 PM,Blocked,scanner.example,203.0.113.10,host.local,192.168.1.15,Ingress Firewall,0,0,12
+
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: 3.11.12
+
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: AlmaLinux 9 or macOS 15
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional notes
+      description: Anything else that materially helps.

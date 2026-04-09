@@ -1,0 +1,66 @@
+name: Workflow question
+description: Ask a scoped question about the firewall flow analysis workflow, SQL analysis, or repository usage.
+title: "[Question] "
+labels:
+  - question
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for practical workflow questions.
+
+        This repository is about export handling on your own system, SQLite analysis, and defensive review. Keep questions on that track.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before asking
+      options:
+        - label: I reviewed the README and docs first.
+          required: true
+        - label: I am not asking for help publishing private exports.
+          required: true
+
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Topic
+      options:
+        - CSV import workflow
+        - Local network assumptions
+        - Direction inference
+        - SQL analysis
+        - DB Browser workflow
+        - Matched By interpretation
+        - Repository structure
+        - CI workflow
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      placeholder: What is the best way to separate persistent inbound probing from list-based outbound blocks in this workflow?
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Relevant context
+      description: Keep this short and technical.
+      placeholder: I imported a week of exports and I am seeing heavy Ad Block volume mixed with inbound firewall hits.
+
+  - type: textarea
+    id: query
+    attributes:
+      label: SQL or command already tried
+      render: sql
+      placeholder: |
+        SELECT matched_by, SUM(flow_count)
+        FROM imported_flows
+        WHERE status = 'Blocked'
+        GROUP BY matched_by
+        ORDER BY SUM(flow_count) DESC;

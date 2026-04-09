@@ -1,0 +1,78 @@
+name: Validate SQL Examples
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "sql/**"
+      - "docs/sql-query-guide.md"
+      - "docs/firewall-analysis-playbook.md"
+      - "examples/**"
+      - "scripts/firewalla_csv_to_sqlite.py"
+      - "scripts/export_top_blocked_sources.py"
+      - "tests/**"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "sql/**"
+      - "docs/sql-query-guide.md"
+      - "docs/firewall-analysis-playbook.md"
+      - "examples/**"
+      - "scripts/firewalla_csv_to_sqlite.py"
+      - "scripts/export_top_blocked_sources.py"
+      - "tests/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-sql:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install test dependency
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pytest
+
+      - name: Run tests
+        run: |
+          pytest
+
+      - name: Initialize database
+        run: |
+          sqlite3 "$RUNNER_TEMP/firewalla.sqlite3" < sql/schema.sql
+          sqlite3 "$RUNNER_TEMP/firewalla.sqlite3" < sql/indexes.sql
+          sqlite3 "$RUNNER_TEMP/firewalla.sqlite3" < sql/views.sql
+
+      - name: Load example data when present
+        run: |
+          if [ -f examples/sample-firewalla-export.csv ]; then
+            python scripts/firewalla_csv_to_sqlite.py \
+              --csv examples/sample-firewalla-export.csv \
+              --db "$RUNNER_TEMP/firewalla.sqlite3" \
+              --source-tz UTC \
+              --local-cidr 192.168.1.0/24 \
+              --local-cidr 10.0.0.0/8 \
+              --summary-csv "$RUNNER_TEMP/blocked_inbound_ranked.csv"
+          else
+            echo "No example CSV present. Running syntax validation only."
+          fi
+
+      - name: Execute repo query files
+        run: |
+          sqlite3 "$RUNNER_TEMP/firewalla.sqlite3" < sql/inbound-analysis.sql > /dev/null
+          sqlite3 "$RUNNER_TEMP/firewalla.sqlite3" < sql/rule-analysis.sql > /dev/null
+          sqlite3 "$RUNNER_TEMP/firewalla.sqlite3" < sql/country-and-list-filters.sql > /dev/null
+          sqlite3 "$RUNNER_TEMP/firewalla.sqlite3" < sql/anomaly-hunting.sql > /dev/null

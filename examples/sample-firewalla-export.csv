@@ -1,0 +1,25 @@
+Timestamp,Status,Source,Source IP,Destination,Destination IP,Matched By,Upload,Download,Flow Count
+"April 7, 2026 5:06 PM",Blocked,scanner-alpha.example,203.0.113.10,workstation-a,192.168.1.15,Ingress Firewall,0,0,12
+"April 7, 2026 5:11 PM",Blocked,scanner-alpha.example,203.0.113.10,workstation-b,192.168.1.25,Port not open,0,0,7
+"April 8, 2026 6:14 AM",Blocked,scanner-alpha.example,203.0.113.10,workstation-a,192.168.1.15,Ingress Firewall,0,0,6
+"April 8, 2026 8:05 AM",Blocked,scanner-beta.example,198.51.100.45,workstation-a,192.168.1.15,Ingress Firewall,0,0,5
+"April 8, 2026 8:10 AM",Blocked,scanner-gamma.example,198.51.100.88,workstation-c,192.168.1.30,Port not open,0,0,9
+"April 8, 2026 8:20 AM",Blocked,scanner-gamma.example,198.51.100.88,workstation-c,192.168.1.30,Ingress Firewall,0,0,4
+"April 8, 2026 9:45 AM",Blocked,scanner-tv.example,198.51.100.200,tv-device,192.168.1.40,"Block Traffic from Internet on ""TV Device"" of Firewalla",0,0,11
+"April 8, 2026 10:10 AM",Blocked,workstation-a,192.168.1.15,ads.badnetwork.example,93.184.216.34,Ad Block,0,0,15
+"April 8, 2026 10:14 AM",Blocked,workstation-b,192.168.1.20,tracker-list.example,203.0.113.210,Block OISD on All Devices of Firewalla,0,0,8
+"April 8, 2026 10:18 AM",Blocked,workstation-b,192.168.1.20,dshield-entry.example,198.51.100.230,Block DShield Block List on All Devices of Firewalla,0,0,5
+"April 8, 2026 10:22 AM",Blocked,workstation-c,192.168.1.25,region-target.example,198.51.100.120,Block North Korea on All Devices of Firewalla,0,0,3
+"April 8, 2026 10:26 AM",Blocked,workstation-d,192.168.1.30,crypto-target.example,198.51.100.150,Crypto List,0,0,6
+"April 8, 2026 10:30 AM",Blocked,workstation-e,192.168.1.31,new-domain.example,198.51.100.151,Newly Registered Domains,0,0,4
+"April 8, 2026 10:34 AM",Blocked,workstation-f,192.168.1.32,tor-exit.example,198.51.100.152,Tor Exit Nodes,0,0,3
+"April 8, 2026 10:38 AM",Blocked,workstation-g,192.168.1.33,hagezi-list.example,198.51.100.153,HaGeZi - Multi Pro++,0,0,7
+"April 8, 2026 10:42 AM",Blocked,workstation-h,192.168.1.34,nsfw-ai-firewalla.example,198.51.100.154,Firewalla's NSFW AI Blocklist,0,0,2
+"April 8, 2026 10:46 AM",Blocked,workstation-i,192.168.1.35,nsfw-ai-ubo.example,198.51.100.155,uBlockOrigin's Huge AI Blocklist,0,0,2
+"April 8, 2026 10:50 AM",Blocked,workstation-j,192.168.1.36,steven-black.example,198.51.100.156,Steven Black,0,0,2
+"April 8, 2026 10:54 AM",Blocked,workstation-k,192.168.1.37,adguard-filter.example,198.51.100.157,AdGuard DNS Filter,0,0,2
+"April 8, 2026 10:58 AM",Blocked,workstation-l,192.168.1.38,blocklistproject.example,198.51.100.158,Block List Project,0,0,2
+"April 8, 2026 11:02 AM",Blocked,scanner-port.example,198.51.100.250,server-a,192.168.1.50,"Block Remote Port 23 on All Devices of Firewalla",0,0,10
+"April 8, 2026 11:06 AM",Blocked,scanner-odd.example,198.51.100.251,server-b,192.168.1.55,Rule or Feature Not Found,0,0,1
+"April 8, 2026 11:10 AM",OK,scanner-alpha.example,203.0.113.10,workstation-a,192.168.1.15,Manual allow review,0,0,1
+"April 8, 2026 11:14 AM",Blocked,external-a.example,198.51.100.201,external-b.example,203.0.113.201,Rule or Feature Not Found,0,0,1

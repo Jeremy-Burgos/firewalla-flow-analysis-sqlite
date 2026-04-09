@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Start with the README
+    url: https://github.com/Jeremy-Burgos/firewalla-flow-analysis-sqlite/blob/main/README.md
+    about: Review the workflow overview, quick start, and core analysis questions first.
+  - name: Read the SQL query guide
+    url: https://github.com/Jeremy-Burgos/firewalla-flow-analysis-sqlite/blob/main/docs/sql-query-guide.md
+    about: Most operational questions are already covered in the query guide.
